@@ -1,24 +1,34 @@
-const procesarPromesa = async (link) =>{
+const url = "https://api.imgflip.com/get_memes";
+
+async function procesarPromesa(url) {
     try {
-        const respuesta = await fetch(link)
-        const info = await respuesta.json()
-        console.log(info);
-        return info
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.data.memes; //
     } catch (error) {
-        console.log("hubo un error: " + error);
+        console.error("Error: ", error);
+        return [];
     }
 }
-const url = "https://api.imgflip.com/get_memes"
+
+const container = document.getElementById('container');
+
+let c=1;
+
 procesarPromesa(url)
-.then((info) =>{
-    info.results.forEach((elemento) => {
+    .then((data) => {
+    data.forEach((elemento) => {
+    if(c>10){
+        return;
+    }
+    else{
         container.innerHTML += `
         <div class="card">
-            <img src="${elemento.image}" alt="">
-            <h2>${elemento.name}</h2>
-            <p>${elemento.species}</p>
-        </div>
-        `
-    })
-})
+            <img src="${elemento.url}" alt="${elemento.name}">
+            <h1>nombre: ${elemento.name}</h1>
+            </div>`;
 
+    }
+     c++;   
+    });
+});
